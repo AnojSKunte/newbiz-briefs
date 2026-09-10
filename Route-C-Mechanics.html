@@ -1,0 +1,607 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow,noarchive">
+<meta name="description" content="How the recommended asset-light RDF model works: money map, per-tonne P&L, the bulk-density finding, sensitivities and objection handling.">
+<title>Route C Mechanics</title>
+<style>
+:root{color-scheme:light dark}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;padding:0}
+img{max-width:100%}
+[hidden]{display:none!important}
+@media print{
+  body{background:#fff!important}
+  .box,.tbl,.kpi,.verdict,.opt,.ladder,.chart,.steps,.map,.obj,.pill,.flow{
+    break-inside:avoid;page-break-inside:avoid}
+  h2{break-after:avoid;page-break-after:avoid}
+}
+</style>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans+Condensed:wght@600;700&family=IBM+Plex+Sans:ital,wght@0,400;0,500;0,600;1,400&display=swap" rel="stylesheet">
+</head>
+<body>
+<style>
+:root{
+  --ground:#F1F4F6; --paper:#FFFFFF; --sunk:#E8ECEF;
+  --ink:#14202B; --ink2:#4C5C69; --ink3:#7D8D99;
+  --rule:#D9E0E5; --rule2:#C3CDD4;
+  --accent:#0F5F6B; --accent-ink:#0A464F; --accent-soft:#DFEDEF;
+  --flag:#A32B1C; --flag-soft:#FAE7E3;
+  --amber:#8A5A08; --amber-soft:#FBF1DE;
+  --shadow:0 1px 2px rgba(20,32,43,.06);
+}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){
+    --ground:#0E161D; --paper:#17222B; --sunk:#111A22;
+    --ink:#E4EBEF; --ink2:#A6B6C1; --ink3:#75868F;
+    --rule:#26333D; --rule2:#33434F;
+    --accent:#4FB3B8; --accent-ink:#7FCACD; --accent-soft:#143135;
+    --flag:#E38375; --flag-soft:#33191A;
+    --amber:#D9A64B; --amber-soft:#2B2314;
+    --shadow:0 1px 2px rgba(0,0,0,.3);
+  }
+}
+:root[data-theme="dark"]{
+  --ground:#0E161D; --paper:#17222B; --sunk:#111A22;
+  --ink:#E4EBEF; --ink2:#A6B6C1; --ink3:#75868F;
+  --rule:#26333D; --rule2:#33434F;
+  --accent:#4FB3B8; --accent-ink:#7FCACD; --accent-soft:#143135;
+  --flag:#E38375; --flag-soft:#33191A;
+  --amber:#D9A64B; --amber-soft:#2B2314;
+  --shadow:0 1px 2px rgba(0,0,0,.3);
+}
+
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:var(--ground);color:var(--ink);
+  font-family:'IBM Plex Sans','Segoe UI',system-ui,sans-serif;
+  font-size:15px;line-height:1.62;-webkit-font-smoothing:antialiased}
+.wrap{max-width:880px;margin:0 auto;padding:44px 22px 96px;
+  display:flex;flex-direction:column;gap:0}
+
+h1,h2,h3,.lbl,.num{font-family:'IBM Plex Sans Condensed','IBM Plex Sans',system-ui,sans-serif}
+h1{font-weight:700;font-size:clamp(2rem,5vw,2.9rem);line-height:1.06;
+  letter-spacing:-.015em;text-wrap:balance;margin-bottom:14px}
+h1 span{color:var(--accent)}
+h2{font-weight:700;font-size:1.5rem;letter-spacing:-.008em;line-height:1.18;
+  text-wrap:balance;margin-bottom:4px}
+h3{font-weight:600;font-size:1.02rem;letter-spacing:.002em;margin-bottom:6px}
+p{color:var(--ink2);max-width:64ch;margin-bottom:12px}
+p:last-child{margin-bottom:0}
+strong{color:var(--ink);font-weight:600}
+em{font-style:italic}
+a{color:var(--accent);text-decoration-thickness:1px;text-underline-offset:2px}
+
+.lbl{font-family:'IBM Plex Mono',ui-monospace,monospace;font-size:10px;font-weight:500;
+  letter-spacing:.16em;text-transform:uppercase;color:var(--ink3)}
+.mono,td.f,.bar-val{font-family:'IBM Plex Mono',ui-monospace,monospace;
+  font-variant-numeric:tabular-nums}
+
+.deck{color:var(--ink2);font-size:1.09rem;max-width:60ch;line-height:1.55}
+.meta{display:grid;grid-template-columns:repeat(auto-fit,minmax(126px,1fr));
+  gap:1px;margin-top:26px;background:var(--rule);border:1px solid var(--rule)}
+.meta div{background:var(--paper);padding:10px 13px;display:flex;
+  flex-direction:column;gap:3px}
+.meta span{font-family:'IBM Plex Mono',monospace;font-size:9.5px;font-weight:500;
+  letter-spacing:.13em;text-transform:uppercase;color:var(--ink3)}
+.meta b{font-family:'IBM Plex Mono',monospace;font-size:.95rem;font-weight:600;
+  color:var(--ink);font-variant-numeric:tabular-nums;line-height:1.2}
+.meta div:last-child b{font-size:.82rem}
+
+section{margin-top:52px;padding-top:24px;border-top:2px solid var(--ink);
+  display:flex;flex-direction:column;gap:16px}
+section.sub{border-top:1px solid var(--rule);padding-top:20px;margin-top:38px}
+.shd{display:flex;flex-direction:column;gap:5px}
+
+/* ---- callout ---- */
+.note{background:var(--paper);border-left:3px solid var(--rule2);
+  padding:14px 18px;font-size:.92rem;display:flex;flex-direction:column;gap:7px}
+.note.k{border-left-color:var(--accent);background:var(--accent-soft)}
+.note.f{border-left-color:var(--flag);background:var(--flag-soft)}
+.note.a{border-left-color:var(--amber);background:var(--amber-soft)}
+.note p{max-width:none;margin:0;color:var(--ink2)}
+
+/* ---- tables ---- */
+.tw{overflow-x:auto;background:var(--paper);border:1px solid var(--rule);box-shadow:var(--shadow)}
+table{border-collapse:collapse;width:100%;font-size:.875rem;min-width:480px}
+th{background:var(--sunk);text-align:left;padding:9px 13px;color:var(--ink);
+  font-family:'IBM Plex Mono',monospace;font-size:9.5px;font-weight:600;
+  letter-spacing:.13em;text-transform:uppercase;border-bottom:1px solid var(--rule2);
+  white-space:nowrap}
+td{padding:9px 13px;border-bottom:1px solid var(--rule);color:var(--ink2);vertical-align:top}
+tr:last-child td{border-bottom:0}
+td.f{text-align:right;white-space:nowrap}
+td.f b{font-weight:600}
+tr.rule td{border-top:1px solid var(--rule2)}
+tr.key td{background:var(--accent-soft)}
+tr.key td,tr.key td.f b{color:var(--ink)}
+tr.bad td{background:var(--flag-soft)}
+tr.bad td.f b{color:var(--flag)}
+.neg{color:var(--flag)}
+
+/* ---- money map ---- */
+.map{display:grid;grid-template-columns:1fr 1fr 1fr;gap:0;
+  background:var(--paper);border:1px solid var(--rule);box-shadow:var(--shadow)}
+.node{padding:15px 16px;display:flex;flex-direction:column;gap:4px;
+  border-bottom:1px solid var(--rule2)}
+.node+.node{border-left:1px solid var(--rule)}
+.node b{font-family:'IBM Plex Sans Condensed',sans-serif;font-weight:700;
+  font-size:.95rem;letter-spacing:.01em;color:var(--ink)}
+.node.us{background:var(--accent-soft)}
+.node.us b{color:var(--accent-ink)}
+.node small{color:var(--ink3);font-size:.78rem;line-height:1.4}
+.leg{grid-column:1/-1;display:grid;grid-template-columns:auto 1fr auto;
+  gap:0 14px;align-items:baseline;padding:11px 16px;border-bottom:1px solid var(--rule)}
+.leg:last-child{border-bottom:0}
+.leg .dir{font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--ink3);
+  letter-spacing:.02em;white-space:nowrap}
+.leg .what{font-size:.86rem;color:var(--ink2)}
+.leg .amt{font-family:'IBM Plex Mono',monospace;font-size:.86rem;font-weight:500;
+  color:var(--ink);white-space:nowrap;text-align:right}
+.leg.gd .amt{color:var(--ink3);font-weight:400}
+
+/* ---- steps ---- */
+.steps{display:flex;flex-direction:column;gap:0;background:var(--paper);
+  border:1px solid var(--rule);box-shadow:var(--shadow)}
+.step{display:grid;grid-template-columns:34px 1fr auto;gap:0 14px;
+  padding:11px 16px;border-bottom:1px solid var(--rule);align-items:baseline}
+.step:last-child{border-bottom:0}
+.step .num{font-family:'IBM Plex Mono',monospace;font-size:12px;font-weight:600;
+  color:var(--accent)}
+.step .t{font-size:.88rem;color:var(--ink2)}
+.step .m{font-family:'IBM Plex Mono',monospace;font-size:.82rem;color:var(--ink);
+  white-space:nowrap;text-align:right;font-variant-numeric:tabular-nums}
+.step .m.q{color:var(--ink3)}
+
+/* ---- payload bars ---- */
+.chart{background:var(--paper);border:1px solid var(--rule);padding:20px 18px 14px;
+  box-shadow:var(--shadow);position:relative}
+.rows{display:flex;flex-direction:column;gap:14px}
+.brow{display:grid;grid-template-columns:132px 1fr;gap:12px;align-items:center}
+.bhead{display:flex;flex-direction:column;gap:1px;min-width:0}
+.bhead b{font-size:.85rem;font-weight:600;color:var(--ink);line-height:1.25}
+.bhead span{font-family:'IBM Plex Mono',monospace;font-size:10.5px;color:var(--ink3)}
+.track{position:relative;height:34px;background:var(--sunk);
+  border-right:1px dashed var(--rule2)}
+.bar{position:absolute;left:0;top:0;bottom:0;background:var(--accent);
+  display:flex;align-items:center;justify-content:flex-end;padding-right:9px}
+.bar.lim{background:var(--flag)}
+.bar-val{font-size:11.5px;font-weight:600;color:var(--paper);letter-spacing:.02em}
+.bcost{position:absolute;top:50%;transform:translateY(-50%);
+  font-family:'IBM Plex Mono',monospace;font-size:11.5px;font-weight:500;
+  white-space:nowrap;padding-left:10px}
+.bcost.bad{color:var(--flag)}
+.bcost.ok{color:var(--accent)}
+.axis{display:grid;grid-template-columns:132px 1fr;gap:12px;margin-top:12px;
+  padding-top:8px;border-top:1px solid var(--rule)}
+.ticks{position:relative;height:15px}
+.ticks span{position:absolute;transform:translateX(-50%);
+  font-family:'IBM Plex Mono',monospace;font-size:10px;color:var(--ink3)}
+.ticks span:first-child{transform:none}
+.ticks span:last-child{transform:translateX(-100%);color:var(--flag);font-weight:600}
+.cap{font-size:.8rem;color:var(--ink3);margin-top:10px;max-width:none}
+
+/* ---- pre/pill ---- */
+.pre{display:flex;flex-direction:column;gap:10px}
+.pill{display:grid;grid-template-columns:auto 1fr;gap:0 14px;background:var(--paper);
+  border:1px solid var(--rule);border-left:3px solid var(--accent);padding:13px 16px;
+  align-items:start;box-shadow:var(--shadow)}
+.pill .n{font-family:'IBM Plex Mono',monospace;font-size:12px;font-weight:600;
+  color:var(--accent);padding-top:2px}
+.pill.go{border-left-color:var(--flag)}
+.pill.go .n{color:var(--flag)}
+.pill h3{margin-bottom:3px}
+.pill p{font-size:.86rem;max-width:none}
+
+/* ---- objections ---- */
+.obj{display:flex;flex-direction:column;gap:0;background:var(--paper);
+  border:1px solid var(--rule);box-shadow:var(--shadow)}
+.o{padding:14px 17px;border-bottom:1px solid var(--rule);
+  display:flex;flex-direction:column;gap:6px}
+.o:last-child{border-bottom:0}
+.o q{font-family:'IBM Plex Sans',sans-serif;font-style:italic;font-size:.92rem;
+  color:var(--ink);quotes:'\201C' '\201D'}
+.o p{font-size:.87rem;max-width:none;margin:0}
+
+/* ---- verdict ---- */
+.verdict{background:var(--ink);color:var(--ground);padding:26px 26px;
+  display:flex;flex-direction:column;gap:11px}
+:root[data-theme="dark"] .verdict,
+.verdict{border:1px solid var(--ink)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]) .verdict{
+  background:var(--paper);color:var(--ink);border-color:var(--rule2)}}
+:root[data-theme="dark"] .verdict{background:var(--paper);color:var(--ink);
+  border-color:var(--rule2)}
+.verdict .lbl{color:var(--accent-ink)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]) .verdict .lbl{
+  color:var(--accent)}}
+:root[data-theme="dark"] .verdict .lbl{color:var(--accent)}
+.verdict p{color:inherit;opacity:.92;max-width:62ch;margin:0;font-size:1.02rem}
+.verdict p b{color:inherit;font-weight:600;opacity:1}
+
+.foot{margin-top:52px;padding-top:18px;border-top:1px solid var(--rule);
+  font-size:.79rem;color:var(--ink3);line-height:1.6;display:flex;
+  flex-direction:column;gap:9px}
+.foot b{color:var(--ink2)}
+
+@media (max-width:640px){
+  .map{grid-template-columns:1fr}
+  .node+.node{border-left:0;border-top:1px solid var(--rule)}
+  .brow,.axis{grid-template-columns:1fr}
+  .step{grid-template-columns:26px 1fr;gap:0 10px}
+  .step .m{grid-column:2;text-align:left;margin-top:3px}
+}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+</style>
+
+<div class="wrap">
+
+<header>
+  <div class="lbl" style="margin-bottom:13px">Project 04 · RDF · The recommended entry model</div>
+  <h1>We sell a document. <span>The fuel rides along.</span></h1>
+  <p class="deck">Route C is not an RDF trade with a service bolted on. It is a compliance service that uses a fuel trade to carry volume — and the arithmetic only works if the material is baled, the haul is short, and the fee is its own line on the purchase order.</p>
+  <div class="meta">
+    <div><span>Capex</span><b>Nil</b></div>
+    <div><span>Working capital</span><b>₹0.4–1.5 Cr</b></div>
+    <div><span>Headcount</span><b>2–3</b></div>
+    <div><span>Net margin</span><b>8.1%</b></div>
+    <div><span>At 100,000 t/yr</span><b>₹16.5 Cr rev<br>₹1.34 Cr PBT</b></div>
+  </div>
+</header>
+
+<div class="note a" style="margin-top:26px">
+  <p><strong>A naming correction first, because it caused this confusion.</strong> I gave this one business two different letters in two files: <strong>“Route C” in Stage 4.5 and “Option A” in Stage 5.3 are the same thing</strong> — this page. There is a <em>separate</em> business also called Option C (franchising plants for a management fee), which is at the bottom. Route A and Route B, for context, are the two asset-owning models we ruled out.</p>
+</div>
+
+<!-- ─────────── MECHANISM ─────────── -->
+<section>
+  <div class="shd">
+    <div class="lbl">The mechanism</div>
+    <h2>What we actually do</h2>
+  </div>
+  <p><strong>We buy RDF from processors who already make it, guarantee its specification to a cement plant, deliver it, and charge that plant a separate fee for the guarantee and the CPCB compliance pack.</strong> We own no plant, no trucks and no waste contract. We own the relationship, the quality protocol and the document trail.</p>
+
+  <div class="map">
+    <div class="node"><b>Processor</b><small>Owns the plant and the ULB contract. Makes RDF as an output, not a product</small></div>
+    <div class="node us"><b>Us</b><small>Owns nothing but the promise: the spec guarantee and the paperwork</small></div>
+    <div class="node"><b>Cement kiln</b><small>Owns the obligation. Must burn RDF and must prove it to CPCB</small></div>
+
+    <div class="leg gd"><span class="dir">Processor → Us → Kiln</span><span class="what">Material: 25 t, baled, Grade II, chlorine &lt;1.0%</span><span class="amt">25 t / load</span></div>
+    <div class="leg"><span class="dir">Us → Processor</span><span class="what">Payment for material, ex-works, 15 days</span><span class="amt">₹700 / t</span></div>
+    <div class="leg"><span class="dir">Us → Transporter</span><span class="what">Freight, hired trailer, 150 km</span><span class="amt">₹640 / t</span></div>
+    <div class="leg"><span class="dir">Kiln → Us</span><span class="what">Material, delivered and accepted at the gate, 45 days</span><span class="amt">₹1,500 / t</span></div>
+    <div class="leg"><span class="dir">Kiln → Us</span><span class="what"><strong>Service fee</strong> — spec guarantee + per-load CPCB compliance pack</span><span class="amt">₹150 / t</span></div>
+  </div>
+
+  <div class="note">
+    <p><strong>Note what we never touch: the ULB, the tipping fee, the waste before it is RDF, the plant, the trucks.</strong> All five are where the capital sits — and all five are what makes Route A and Route B fail our constraints.</p>
+  </div>
+</section>
+
+<!-- ─────────── ONE LOAD ─────────── -->
+<section class="sub">
+  <div class="shd">
+    <div class="lbl">The same thing, concretely</div>
+    <h2>One load, gate to gate</h2>
+  </div>
+  <div class="steps">
+    <div class="step"><span class="num">01</span><span class="t">Cement plant issues a PO: 500 t/month, Grade II, chlorine &lt;1.0%, delivered</span><span class="m q">—</span></div>
+    <div class="step"><span class="num">02</span><span class="t">We place a back-to-back order on a processor 150 km away, <strong>specifying baled, not loose</strong></span><span class="m">₹700/t committed</span></div>
+    <div class="step"><span class="num">03</span><span class="t">Processor bales 25 t. We draw and split a sample before dispatch</span><span class="m">₹40/t lab</span></div>
+    <div class="step"><span class="num">04</span><span class="t">We hire a 32 ft trailer. It loads the full 25 t and leaves</span><span class="m">₹640/t freight</span></div>
+    <div class="step"><span class="num">05</span><span class="t">Truck weighs in at the kiln. Plant cross-tests its half of the split sample</span><span class="m q">—</span></div>
+    <div class="step"><span class="num">06</span><span class="t">Load accepted, tipped into the AFR yard</span><span class="m">₹37,500 due</span></div>
+    <div class="step"><span class="num">07</span><span class="t"><strong>We issue the compliance pack</strong> — source declaration, grade certificate, lab report, weighbridge slips, chain of custody</span><span class="m">₹3,750 due</span></div>
+    <div class="step"><span class="num">08</span><span class="t">Kiln pays in 45 days. We paid the processor in 15</span><span class="m">₹33,500 funded, 30 d</span></div>
+  </div>
+  <p class="cap"><strong>One truck: ₹41,250 revenue · ₹33,500 cost of goods · ~₹3,350 PBT.</strong> Multiply by 4,000 trucks a year to get a business.</p>
+</section>
+
+<!-- ─────────── WHAT WE SELL ─────────── -->
+<section>
+  <div class="shd">
+    <div class="lbl">The product</div>
+    <h2>Why anyone pays the fee</h2>
+  </div>
+  <p>The fee is <strong>48% of contribution</strong>, so it has to be real. Three things, ranked by how defensible they are.</p>
+  <div class="tw">
+  <table>
+    <thead><tr><th>What we sell</th><th>Why the kiln cannot simply do it itself</th></tr></thead>
+    <tbody>
+      <tr><td><strong>We carry the rejection risk.</strong> If a load fails chlorine at the gate, it is our loss</td><td>Today the kiln finds out <em>after</em> paying freight and committing yard space. One chlorine excursion builds alkali-chloride rings in the preheater, forces a bypass and can derate the kiln. <strong>The expensive failure is not the load — it is the kiln</strong></td></tr>
+      <tr><td><strong>We produce the CPCB pack per load</strong>, reconciled to their internal AFR ledger</td><td>SWM 2026 requires them to <em>achieve</em> an RDF share; CPCB AFR returns require them to <em>prove</em> it. Their processors hand them a weighbridge slip and nothing else. <strong>Recykal already runs this exact system for plastic EPR</strong></td></tr>
+      <tr><td><strong>We guarantee availability at spec</strong> across multiple sources</td><td>One processor's output varies with whatever waste arrived that week. We can blend and switch sources. <strong>Only real once we hold 3+ sources</strong></td></tr>
+    </tbody>
+  </table>
+  </div>
+  <div class="note k">
+    <p><strong>What we are not selling: a cheaper fuel.</strong> RDF is already cheap. We are selling the removal of a risk and the production of a document — both of which the regulation created in April 2026, and neither of which a waste operator has any reason to build.</p>
+  </div>
+</section>
+
+<!-- ─────────── DENSITY ─────────── -->
+<section>
+  <div class="shd">
+    <div class="lbl">The finding that decides it</div>
+    <h2>Bulk density, not distance, sets the freight</h2>
+  </div>
+  <p><strong>RDF is bulky long before it is heavy.</strong> A 32 ft trailer has ~58 m³ of usable space and a 25 t payload limit. Loose fluff RDF at 120 kg/m³ fills the space at <strong>7 tonnes</strong> — so you pay for a full truck and move a quarter of a load.</p>
+
+  <div class="chart">
+    <div class="rows">
+      <div class="brow">
+        <div class="bhead"><b>Loose fluff</b><span>120 kg/m³</span></div>
+        <div class="track">
+          <div class="bar lim" style="width:28%"><span class="bar-val">7.0 t</span></div>
+          <div class="bcost bad" style="left:28%">₹2,299/t — exceeds the material's value</div>
+        </div>
+      </div>
+      <div class="brow">
+        <div class="bhead"><b>Lightly compacted</b><span>200 kg/m³</span></div>
+        <div class="track">
+          <div class="bar lim" style="width:46.4%"><span class="bar-val">11.6 t</span></div>
+          <div class="bcost bad" style="left:46.4%">₹1,379/t</div>
+        </div>
+      </div>
+      <div class="brow">
+        <div class="bhead"><b>Baled</b><span>450 kg/m³</span></div>
+        <div class="track">
+          <div class="bar" style="width:100%"><span class="bar-val">25.0 t · weight limit</span></div>
+        </div>
+      </div>
+      <div class="brow">
+        <div class="bhead"><b>Densified / pellets</b><span>650 kg/m³</span></div>
+        <div class="track">
+          <div class="bar" style="width:100%"><span class="bar-val">25.0 t · no further gain</span></div>
+        </div>
+      </div>
+    </div>
+    <div class="axis">
+      <div></div>
+      <div class="ticks">
+        <span style="left:0%">0 t</span>
+        <span style="left:24%">6</span>
+        <span style="left:48%">12</span>
+        <span style="left:72%">18</span>
+        <span style="left:100%">25 t — legal payload limit</span>
+      </div>
+    </div>
+    <p class="cap">Payload per 32 ft trailer, 58 m³ usable. Red bars are <strong>volume-limited</strong> — the truck is full of air. Freight per tonne computed on a ₹16,000 one-way lump sum over 150 km, including return empty.</p>
+  </div>
+
+  <div class="note k">
+    <p><strong>Three consequences, none of them optional.</strong></p>
+    <p><strong>1. On loose RDF the freight alone exceeds the delivered price.</strong> The business does not exist. This is the real reason processors “give RDF away” in weak markets — they are paying to avoid the freight.</p>
+    <p><strong>2. Baling gets you to 25 t and then stops paying.</strong> Pelletising costs more energy and buys nothing, because you have hit the <em>weight</em> limit, not the volume limit. <strong>Do not fund a pelletiser.</strong></p>
+    <p><strong>3. Baling is a contract term, not our capex.</strong> A baler is ₹15–40 lakh. Most processors have one or will add one against guaranteed offtake. We specify it; we do not buy it.</p>
+  </div>
+</section>
+
+<!-- ─────────── P&L ─────────── -->
+<section>
+  <div class="shd">
+    <div class="lbl">Unit economics</div>
+    <h2>Per tonne delivered</h2>
+  </div>
+  <p>Baled RDF, 150 km lead, 25 t payload.</p>
+  <div class="tw">
+  <table>
+    <thead><tr><th>Line</th><th style="text-align:right">₹ / t</th><th style="text-align:right">% of revenue</th></tr></thead>
+    <tbody>
+      <tr><td>Sale to kiln — delivered, Grade I/II guaranteed</td><td class="f"><b>1,500</b></td><td class="f">90.9%</td></tr>
+      <tr><td><strong>Service fee</strong> — spec assurance + CPCB pack</td><td class="f"><b>150</b></td><td class="f">9.1%</td></tr>
+      <tr class="rule"><td><strong>Revenue</strong></td><td class="f"><b>1,650</b></td><td class="f">100.0%</td></tr>
+      <tr><td>Buy ex-processor, baled</td><td class="f"><span class="neg">(700)</span></td><td class="f">−42.4%</td></tr>
+      <tr><td>Freight, 150 km at 25 t</td><td class="f"><span class="neg">(640)</span></td><td class="f">−38.8%</td></tr>
+      <tr class="rule"><td><strong>Contribution</strong></td><td class="f"><b>310</b></td><td class="f">18.8%</td></tr>
+      <tr><td>Quality — sampling, lab, third-party testing</td><td class="f"><span class="neg">(40)</span></td><td class="f">−2.4%</td></tr>
+      <tr><td>Documentation and operations staff</td><td class="f"><span class="neg">(30)</span></td><td class="f">−1.8%</td></tr>
+      <tr><td>Working capital at 14%, 40 net days</td><td class="f"><span class="neg">(21)</span></td><td class="f">−1.2%</td></tr>
+      <tr><td>Rejection / bad-debt reserve</td><td class="f"><span class="neg">(25)</span></td><td class="f">−1.5%</td></tr>
+      <tr><td>SG&amp;A allocation</td><td class="f"><span class="neg">(60)</span></td><td class="f">−3.6%</td></tr>
+      <tr class="key rule"><td><strong>PBT</strong></td><td class="f"><b>134</b></td><td class="f"><b>8.1%</b></td></tr>
+    </tbody>
+  </table>
+  </div>
+  <div class="note f">
+    <p><strong>The one line that is the whole argument.</strong> The service fee is ₹150 of the ₹310 contribution — <strong>48%.</strong> Strip it out and the goods leg alone is <strong>−₹16/t. A loss.</strong></p>
+    <p>So this is not a trade with a service attached. <strong>It is a service with a trade attached</strong> — the trade is there to carry revenue scale, and the fee is where the profit lives.</p>
+  </div>
+  <p style="font-size:.86rem;color:var(--ink3);max-width:none"><strong>Reconciliation with Stage 4.5.</strong> That section put naked trading at “3–5% gross”. The full stack shows the buy–sell spread is ~53% before freight and ~10.7% after — and <em>negative</em> once our own cost to serve is loaded. Same conclusion, stronger: goods-only is not thin, it is loss-making.</p>
+</section>
+
+<!-- ─────────── SCALE ─────────── -->
+<section class="sub">
+  <div class="shd">
+    <div class="lbl">Scale</div>
+    <h2>Two to four relationships, not forty</h2>
+  </div>
+  <div class="tw">
+  <table>
+    <thead><tr><th>Volume</th><th style="text-align:right">Trucks / day</th><th style="text-align:right">Revenue</th><th style="text-align:right">PBT</th><th style="text-align:right">Working capital</th></tr></thead>
+    <tbody>
+      <tr><td>25,000 t/yr</td><td class="f">3.3</td><td class="f">₹4.1 Cr</td><td class="f">₹0.34 Cr</td><td class="f">₹0.37 Cr</td></tr>
+      <tr><td>50,000 t/yr</td><td class="f">6.7</td><td class="f">₹8.2 Cr</td><td class="f">₹0.67 Cr</td><td class="f">₹0.73 Cr</td></tr>
+      <tr class="key"><td><strong>100,000 t/yr</strong></td><td class="f"><b>13.3</b></td><td class="f"><b>₹16.5 Cr</b></td><td class="f"><b>₹1.34 Cr</b></td><td class="f"><b>₹1.47 Cr</b></td></tr>
+      <tr><td>300,000 t/yr</td><td class="f">40.0</td><td class="f">₹49.5 Cr</td><td class="f">₹4.03 Cr</td><td class="f">₹4.41 Cr</td></tr>
+    </tbody>
+  </table>
+  </div>
+  <p>A 3 MTPA cement plant needs <strong>25,550 t/yr at 5% TSR</strong> and <strong>76,650 t/yr at 15%</strong>. So 100,000 t/yr is about <strong>1.3 large kilns at 15%, or four at today's 5%.</strong> On the supply side it is 500,000 t of mixed MSW — a city of ~3.0 million — or <strong>~600 TPD of dry-waste MRF capacity, which is roughly one Nepra.</strong></p>
+  <p class="cap">Computed at 0.70 t clinker per t cement, 730 kcal/kg clinker, RDF at 3,000 kcal/kg = 3 Gcal/t.</p>
+</section>
+
+<!-- ─────────── SENSITIVITY ─────────── -->
+<section>
+  <div class="shd">
+    <div class="lbl">Fragility</div>
+    <h2>What breaks it — and it breaks easily</h2>
+  </div>
+  <p>Each row is a single-variable change from the base case, at 100,000 t/yr.</p>
+  <div class="tw">
+  <table>
+    <thead><tr><th>Scenario</th><th style="text-align:right">PBT ₹/t</th><th style="text-align:right">Net %</th><th style="text-align:right">Scaled</th><th>Verdict</th></tr></thead>
+    <tbody>
+      <tr class="key"><td><strong>Base case</strong></td><td class="f"><b>134</b></td><td class="f"><b>8.1%</b></td><td class="f"><b>₹1.34 Cr</b></td><td>—</td></tr>
+      <tr><td>DSO 90 days instead of 45</td><td class="f">111</td><td class="f">6.7%</td><td class="f">₹1.11 Cr</td><td>Survives</td></tr>
+      <tr><td>Cost of funds 18% instead of 14%</td><td class="f">129</td><td class="f">7.8%</td><td class="f">₹1.29 Cr</td><td>Survives</td></tr>
+      <tr><td>Service fee halved to ₹75/t</td><td class="f">59</td><td class="f">3.6%</td><td class="f">₹0.59 Cr</td><td>Misses target</td></tr>
+      <tr class="bad"><td>Kiln pays ₹1,350 instead of ₹1,500 <span class="mono">(−10%)</span></td><td class="f"><b>(16)</b></td><td class="f"><b>−0.9%</b></td><td class="f"><b>−₹0.16 Cr</b></td><td><strong>Loss</strong></td></tr>
+      <tr class="bad"><td>Service fee not accepted at all</td><td class="f"><b>(16)</b></td><td class="f"><b>−0.9%</b></td><td class="f"><b>−₹0.16 Cr</b></td><td><strong>Loss</strong></td></tr>
+      <tr class="bad"><td>Processor holds out at ₹850 instead of ₹700</td><td class="f"><b>(18)</b></td><td class="f"><b>−1.1%</b></td><td class="f"><b>−₹0.18 Cr</b></td><td><strong>Loss</strong></td></tr>
+      <tr class="bad"><td>Lead 300 km instead of 150</td><td class="f"><b>(515)</b></td><td class="f"><b>−31.2%</b></td><td class="f"><b>−₹5.15 Cr</b></td><td><strong>Loss</strong></td></tr>
+      <tr class="bad"><td>Loose loading — 7 t payload instead of 25 t</td><td class="f"><b>(1,537)</b></td><td class="f"><b>−93.1%</b></td><td class="f"><b>−₹15.37 Cr</b></td><td><strong>Catastrophic</strong></td></tr>
+    </tbody>
+  </table>
+  </div>
+  <div class="note f">
+    <p><strong>Read this table carefully, because it inverts the intuition.</strong></p>
+    <p><strong>Working capital is not the risk.</strong> Doubling DSO to 90 days costs ₹23/t. Adding 400 bp to the cost of funds costs ₹5/t. Both are rounding errors — and both are what anyone would instinctively worry about in a principal trading model.</p>
+    <p><strong>The real risks, in order: loading density, haul distance, whether the fee is accepted, then a 10% price move on either side.</strong> A 10% concession to the kiln, <em>or</em> a 21% concession to the processor, <em>or</em> losing the fee — each one alone takes it to a loss. <strong>There is no room to negotiate badly. The contract terms are the business model.</strong></p>
+  </div>
+</section>
+
+<!-- ─────────── PRECONDITIONS ─────────── -->
+<section>
+  <div class="shd">
+    <div class="lbl">If you recommend it, recommend it with these attached</div>
+    <h2>Three preconditions</h2>
+  </div>
+  <div class="pre">
+    <div class="pill"><span class="n">01</span><div>
+      <h3>Baled or compacted material only — minimum ~400 kg/m³</h3>
+      <p>Ask the processor their bulk density and whether they bale. If loose only, either they add a baler as a contract term, or we walk.</p>
+    </div></div>
+    <div class="pill"><span class="n">02</span><div>
+      <h3>Haul under ~200 km, ideally under 150</h3>
+      <p>Map processors against kilns <em>before</em> talking to either. Anything beyond 250 km is dead on freight alone.</p>
+    </div></div>
+    <div class="pill go"><span class="n">03</span><div>
+      <h3>The service fee is a separate contracted line on the PO — not “included in the price”</h3>
+      <p><strong>This is the go/no-go.</strong> A procurement team's instinct is to fold the fee into the material price. The moment that happens we are at −0.9% net and we are a naked trader. If the kiln will only pay one number, the answer is no.</p>
+    </div></div>
+  </div>
+</section>
+
+<!-- ─────────── THE ASK ─────────── -->
+<section class="sub">
+  <div class="shd">
+    <div class="lbl">The ask</div>
+    <h2>What we need to start</h2>
+  </div>
+  <div class="tw">
+  <table>
+    <thead><tr><th>Item</th><th>Requirement</th><th>Note</th></tr></thead>
+    <tbody>
+      <tr><td><strong>Capex</strong></td><td><strong>Effectively nil</strong></td><td>No plant, no trucks, no baler. That is the point</td></tr>
+      <tr class="key"><td><strong>Working capital</strong></td><td><strong>₹0.4–1.5 Cr</strong> for 25,000–100,000 t/yr</td><td>40 net days of COGS. <strong>The only real capital ask</strong></td></tr>
+      <tr><td><strong>People</strong></td><td><strong>2–3</strong>: commercial lead, quality/ops, shared documentation resource</td><td>The documentation resource can sit inside the existing EPR compliance team</td></tr>
+      <tr><td><strong>Systems</strong></td><td>Chain-of-custody and grade certification per load</td><td><strong>Recykal already has this for plastic EPR.</strong> Adapt, do not build</td></tr>
+      <tr><td><strong>Lab</strong></td><td>One empanelled NABL lab — chlorine, GCV, moisture, ash</td><td>Sits in the ₹40/t quality line</td></tr>
+      <tr><td><strong>Time to first revenue</strong></td><td><strong>One quarter</strong>, if a processor and a kiln both say yes</td><td>The first milestone is a single truck, not a pilot plant</td></tr>
+    </tbody>
+  </table>
+  </div>
+  <div class="note k">
+    <p><strong>Frame the ask honestly: this is a working-capital request and two headcount, not a capex request.</strong> That is precisely what makes it recommendable against the constraints — not capex heavy, fully compliant, and 5%+ net.</p>
+  </div>
+</section>
+
+<!-- ─────────── CONTRACTS ─────────── -->
+<section class="sub">
+  <div class="shd">
+    <div class="lbl">Paperwork</div>
+    <h2>Three documents, and one clause that matters most</h2>
+  </div>
+  <div class="tw">
+  <table>
+    <thead><tr><th>Document</th><th>Between</th><th>Must contain</th></tr></thead>
+    <tbody>
+      <tr><td><strong>Offtake agreement</strong></td><td>Us ⟷ Cement plant</td><td>Volume · grade with <strong>numeric</strong> thresholds · <strong>the service fee as a separate line</strong> · rejection protocol and who bears the cost · payment terms · price revision mechanism</td></tr>
+      <tr><td><strong>Back-to-back purchase</strong></td><td>Us ⟷ Processor</td><td>Mirror volumes · <strong>minimum bulk density / baled requirement</strong> · ex-works price · our right to reject at their gate · payment terms shorter than our DSO</td></tr>
+      <tr><td><strong>Quality protocol</strong></td><td>Annexed to both</td><td>Sampling method · split-sample retention · named lab · whose result governs a dispute · tolerance bands</td></tr>
+    </tbody>
+  </table>
+  </div>
+  <div class="note a">
+    <p><strong>The clause: whose lab result governs a rejection.</strong> If the kiln's own lab is final and unappealable, we carry unlimited rejection risk on their sampling and their equipment. <strong>Insist on split samples and a named third-party umpire lab.</strong> Get this wrong and the ₹25/t rejection reserve is nowhere near enough.</p>
+  </div>
+</section>
+
+<!-- ─────────── OBJECTIONS ─────────── -->
+<section>
+  <div class="shd">
+    <div class="lbl">For the conversation you are about to have</div>
+    <h2>Six objections, answered</h2>
+  </div>
+  <div class="obj">
+    <div class="o">
+      <q>This is just trading. We know trading margins are terrible.</q>
+      <p><strong>Correct — and that is why the goods leg alone loses money.</strong> The recommendation is not trading. It is a service sale that uses a trade to carry volume. The fee is 48% of contribution.</p>
+    </div>
+    <div class="o">
+      <q>Why would a cement plant pay us a fee for something their supplier should do?</q>
+      <p>Because their supplier is a waste operator, not a fuel merchant. <strong>Antony makes under 4% of revenue from RDF; Nepra is losing ₹47 Cr.</strong> Neither has any reason to build a documentation layer. And the documentation only became mandatory in April 2026.</p>
+    </div>
+    <div class="o">
+      <q>Nepra is losing money doing this. Why won't we?</q>
+      <p><strong>Nepra owns five plants and the waste contracts. We own none.</strong> They lose money on the asset, not on the trade — their AFR line went from 22% to 45% of revenue, so the AFR <em>demand</em> is real; it is the <em>plant</em> that sinks them. We sell to their problem rather than repeat it.</p>
+    </div>
+    <div class="o">
+      <q>What if the mandate isn't enforced?</q>
+      <p>Then demand stays at today's 3–5% TSR and this stays small — <strong>but it does not lose money, because there is no fixed asset to carry.</strong> That asymmetry is the whole case for entering asset-light instead of waiting.</p>
+    </div>
+    <div class="o">
+      <q>₹1.34 Cr of PBT is small for Recykal.</q>
+      <p><strong>True — say so.</strong> The case is not size today. It is a compliant, near-zero-capex position in a category the law just created, which scales to ₹49.5 Cr revenue and ₹4 Cr PBT at 300,000 t <strong>on the same overhead</strong>, and which builds the two assets the franchise layer needs.</p>
+    </div>
+    <div class="o">
+      <q>What's the downside if it fails?</q>
+      <p><strong>Two headcount, ₹0.4–1.5 Cr of working capital, and one quarter.</strong> No stranded asset, no concession commitment, no exit cost.</p>
+    </div>
+  </div>
+</section>
+
+<div class="verdict" style="margin-top:34px">
+  <div class="lbl">The one-line version</div>
+  <p><b>RDF demand was created by regulation in April 2026. The incumbents who make it are waste operators with no interest in marketing a fuel — and the same regulation requires the buyer to document what it burns. We can sell that documentation with the fuel attached, for two headcount and working capital, at 8% net — provided the material is baled, the haul is short, and the fee is a separate line on the PO.</b></p>
+</div>
+
+<!-- ─────────── THE OTHER C ─────────── -->
+<section>
+  <div class="shd">
+    <div class="lbl">Kept separate on purpose</div>
+    <h2>And the <em>other</em> C — the franchise layer</h2>
+  </div>
+  <p>Stage 5.5's “Option C” is a <strong>different, later business</strong>: a partner owns the plant, we bring the cement offtake, quality system, compliance layer and platform, and take a management fee.</p>
+  <div class="tw">
+  <table>
+    <thead><tr><th>Plants under management</th><th style="text-align:right">Fee revenue at 3–5%</th><th style="text-align:right">Net after cost to serve</th></tr></thead>
+    <tbody>
+      <tr><td>1 plant · 300 TPD · ₹10.3 Cr revenue</td><td class="f">₹30.9–51.5 lakh</td><td class="f">₹13.4–34.0 lakh</td></tr>
+      <tr><td>5 plants</td><td class="f">₹1.5–2.6 Cr</td><td class="f">₹0.67–1.70 Cr</td></tr>
+      <tr><td>10 plants</td><td class="f">₹3.1–5.2 Cr</td><td class="f">₹1.34–3.40 Cr</td></tr>
+      <tr><td>20 plants</td><td class="f">₹6.2–10.3 Cr</td><td class="f">₹2.68–6.80 Cr</td></tr>
+    </tbody>
+  </table>
+  </div>
+  <p><strong>Why it comes second.</strong> The fee is only payable if we already hold something the partner needs — a cement offtake book and a working quality system. <strong>Route C builds exactly those two assets.</strong> Franchising before we have them is selling a service we have never operated.</p>
+  <div class="note a">
+    <p><strong>Best candidate so far: Nepra.</strong> Five MRFs, optical sorting, no fuel-marketing arm, 45% of revenue already from AFR, PE-controlled with promoters off the board, losing ₹47 Cr — they have both the need and the authority to sign something unconventional. <strong>Caveat: CARE BB−/Negative.</strong> Structure it as a fee, not as us taking title to their material, and watch the receivable.</p>
+  </div>
+</section>
+
+<div class="foot">
+  <p><b>Sourced:</b> RDF price band ₹1,000–2,500/t and the two-sided revenue structure (Indian Cement Review) · cement TSR levels · SWM Rules 2026 and CPCB AFR return obligations · player financials from CARE Ratings and listed disclosures (Stage 2A).</p>
+  <p><b>Computed by us from stated assumptions:</b> the entire per-tonne P&amp;L, the density-to-freight table, scale and counterparty sizing, all sensitivities, and the franchise fee ladder.</p>
+  <p><b>Confidence on the P&amp;L is LOW until four things are checked:</b> a real bulk density from one processor · whether a kiln will accept a separate fee line · real trip-based freight on one corridor · the ex-works price a processor will take for guaranteed offtake. Those four assumptions — ₹1,500 delivered, ₹700 ex-works, ₹150 fee, ₹16,000 per trailer per 150 km — carry the whole result, and the fragility table shows a modest miss on any one turns 8.1% net into a loss.</p>
+  <p><b>So present the P&amp;L as a structure to be validated, not a forecast.</b> What is robust is the <em>shape</em>: the fee carries the profit, density and distance dominate everything, and working capital does not.</p>
+</div>
+
+</div>
+</body>
+</html>

@@ -1,0 +1,75 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow,noarchive">
+<meta name="description" content="New business category briefs — index.">
+<title>New Biz Briefs</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{
+  color-scheme:light dark;
+  --bg:#FAFAF7; --text:#1A1A1A; --t2:#555; --t3:#888;
+  --accent:#2D6A4F; --border:#E8E5DF; --card:#FFF;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --bg:#14150F; --text:#EDECE4; --t2:#B4B2A6; --t3:#8A887D;
+  --accent:#74C69D; --border:#2C2D24; --card:#1C1E16;
+}}
+:root[data-theme="dark"]{
+  --bg:#14150F; --text:#EDECE4; --t2:#B4B2A6; --t3:#8A887D;
+  --accent:#74C69D; --border:#2C2D24; --card:#1C1E16;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:var(--bg);color:var(--text);font-family:'Inter',system-ui,sans-serif;
+  font-size:15.5px;line-height:1.6;-webkit-font-smoothing:antialiased}
+.wrap{max-width:720px;margin:0 auto;padding:64px 24px 90px;
+  display:flex;flex-direction:column;gap:0}
+.eyebrow{font-family:'JetBrains Mono',monospace;font-size:10.5px;letter-spacing:.15em;
+  text-transform:uppercase;color:var(--accent);font-weight:500;margin-bottom:12px}
+h1{font-family:'Instrument Serif',Georgia,serif;font-weight:400;
+  font-size:clamp(1.9rem,5vw,2.6rem);line-height:1.08;letter-spacing:-.015em;
+  margin-bottom:12px}
+.sub{color:var(--t2);max-width:58ch}
+.list{display:flex;flex-direction:column;gap:11px;margin-top:34px}
+a.doc{background:var(--card);border:1px solid var(--border);border-radius:4px;
+  border-left:3px solid var(--accent);padding:18px 20px;text-decoration:none;
+  display:flex;flex-direction:column;gap:5px;transition:border-color .12s}
+a.doc:hover,a.doc:focus-visible{border-color:var(--accent)}
+a.doc b{font-size:1.02rem;font-weight:600;color:var(--text)}
+a.doc span{font-size:.87rem;color:var(--t2)}
+a.doc em{font-family:'JetBrains Mono',monospace;font-style:normal;font-size:10px;
+  letter-spacing:.11em;text-transform:uppercase;color:var(--t3);margin-top:3px}
+.foot{margin-top:44px;padding-top:16px;border-top:1px solid var(--border);
+  font-size:.79rem;color:var(--t3);line-height:1.6}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="eyebrow">New business categories · Research briefs</div>
+  <h1>New Biz Briefs</h1>
+  <p class="sub">Working analysis on new B2B category entries. Each brief carries its own sources and marks which figures are researched and which are our own arithmetic.</p>
+
+  <div class="list">
+    <a class="doc" href="RDF-Business-Case.html">
+      <b>RDF Business Case</b>
+      <span>Refuse Derived Fuel as an alternative kiln fuel: what it is, how the money works, the SWM 2026 mandate, demand sized, what the incumbents actually earn, six entry options and the kill risks.</span>
+      <em>Project 04 · 9 sections</em>
+    </a>
+    <a class="doc" href="Route-C-Mechanics.html">
+      <b>Route C Mechanics</b>
+      <span>The recommended entry model, built out: money map, one load gate to gate, per-tonne P&amp;L, the bulk-density finding, sensitivities, three preconditions and the objections you will get.</span>
+      <em>Project 04 · Companion to the business case</em>
+    </a>
+  </div>
+
+  <div class="foot">
+    Internal working documents, shared by link. Figures marked <em style="font-style:normal;font-family:'JetBrains Mono',monospace">(computed)</em> are our own arithmetic from stated assumptions, not sourced data — each brief states its own confidence at the end.
+  </div>
+</div>
+</body>
+</html>
