@@ -1,0 +1,516 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow,noarchive">
+<meta name="description" content="Response to review: is the SWM 2026 mandate RDF-specific, real cement-side rates, a fully costed P&L including manpower, and where to start geographically.">
+<title>Four Questions, Answered</title>
+<style>
+:root{color-scheme:light dark}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;padding:0}
+img{max-width:100%}
+[hidden]{display:none!important}
+@media print{
+  body{background:#fff!important}
+  .box,.tbl,.kpi,.verdict,.opt,.ladder,.chart,.steps,.map,.obj,.pill,.flow{
+    break-inside:avoid;page-break-inside:avoid}
+  h2{break-after:avoid;page-break-after:avoid}
+}
+</style>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+</head>
+<body>
+<style>
+:root{
+  --bg:#FAFAF7; --text:#1A1A1A; --t2:#555; --t3:#888; --t4:#AAA;
+  --accent:#2D6A4F; --accent-lt:#D8F3DC; --warm:#B7791F; --warm-bg:#FFFAF0;
+  --red:#C53030; --red-bg:#FFF5F5; --red-lt:#F7D9D9;
+  --border:#E8E5DF; --card:#FFF; --stripe:#F7F6F3;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --bg:#14150F; --text:#EDECE4; --t2:#B4B2A6; --t3:#8A887D; --t4:#66645C;
+  --accent:#74C69D; --accent-lt:#1B3227; --warm:#D9A64B; --warm-bg:#2A2314;
+  --red:#E38375; --red-bg:#301A18; --red-lt:#4A2422;
+  --border:#2C2D24; --card:#1C1E16; --stripe:#191B14;
+}}
+:root[data-theme="dark"]{
+  --bg:#14150F; --text:#EDECE4; --t2:#B4B2A6; --t3:#8A887D; --t4:#66645C;
+  --accent:#74C69D; --accent-lt:#1B3227; --warm:#D9A64B; --warm-bg:#2A2314;
+  --red:#E38375; --red-bg:#301A18; --red-lt:#4A2422;
+  --border:#2C2D24; --card:#1C1E16; --stripe:#191B14;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:var(--bg);color:var(--text);font-family:'Inter',system-ui,sans-serif;
+  font-size:15.5px;line-height:1.6;-webkit-font-smoothing:antialiased}
+.wrap{max-width:980px;margin:0 auto;padding:48px 24px 100px}
+.eyebrow{font-family:'JetBrains Mono',monospace;font-size:10.5px;letter-spacing:.15em;
+  text-transform:uppercase;color:var(--accent);font-weight:500;margin-bottom:13px}
+h1{font-family:'Instrument Serif',Georgia,serif;font-weight:400;font-size:clamp(2.1rem,5.4vw,3.3rem);
+  line-height:1.04;letter-spacing:-.018em;margin-bottom:16px;max-width:24ch}
+h1 em{font-style:italic;color:var(--accent)}
+.sub{color:var(--t2);max-width:66ch;font-size:1.05rem}
+h2{font-family:'Instrument Serif',serif;font-weight:400;font-size:1.85rem;letter-spacing:-.012em;
+  margin:56px 0 6px;padding-top:26px;border-top:1px solid var(--border);line-height:1.15}
+h2 .n{font-family:'JetBrains Mono',monospace;font-size:.5em;color:var(--accent);
+  letter-spacing:.1em;vertical-align:middle;margin-right:10px}
+h2 em{font-style:italic;color:var(--accent)}
+h3{font-size:1rem;font-weight:600;margin:28px 0 8px}
+p{margin-bottom:13px;color:var(--t2);max-width:70ch}
+p strong,li strong,td strong{color:var(--text);font-weight:600}
+ul{margin:0 0 15px 19px;color:var(--t2);max-width:70ch}
+li{margin-bottom:6px}
+.mono{font-family:'JetBrains Mono',monospace;font-variant-numeric:tabular-nums}
+a{color:var(--accent)}
+blockquote{border-left:3px solid var(--accent);padding:4px 0 4px 18px;margin:18px 0;
+  font-family:'Instrument Serif',serif;font-size:1.22rem;line-height:1.45;color:var(--text);
+  max-width:62ch;font-style:italic}
+
+.tbl{overflow-x:auto;margin:22px 0;border:1px solid var(--border);border-radius:4px;background:var(--card)}
+table{border-collapse:collapse;width:100%;font-size:.86rem;min-width:540px}
+thead th{background:var(--accent);color:var(--bg);text-align:left;padding:10px 13px;
+  font-family:'JetBrains Mono',monospace;font-size:9.5px;letter-spacing:.09em;
+  text-transform:uppercase;font-weight:600;white-space:nowrap}
+td{padding:10px 13px;border-bottom:1px solid var(--border);color:var(--t2);vertical-align:top}
+tbody tr:nth-child(even) td{background:var(--stripe)}
+tbody tr:last-child td{border-bottom:0}
+td.n{text-align:right;font-family:'JetBrains Mono',monospace;font-variant-numeric:tabular-nums;
+  white-space:nowrap}
+tr.hl td{background:var(--accent-lt)!important;color:var(--text)}
+tr.bad td{background:var(--red-bg)!important}
+tr.tot td{background:var(--stripe);font-weight:600;border-top:1px solid var(--t4)}
+.neg{color:var(--red)}
+.pos{color:var(--accent);font-weight:600}
+
+.box{border-radius:0 4px 4px 0;padding:16px 20px;margin:20px 0;font-size:.9rem}
+.box.g{background:var(--accent-lt);border-left:3px solid var(--accent)}
+.box.w{background:var(--warm-bg);border-left:3px solid var(--warm)}
+.box.r{background:var(--red-bg);border-left:3px solid var(--red)}
+.box .k{font-family:'JetBrains Mono',monospace;font-size:9.5px;letter-spacing:.13em;
+  text-transform:uppercase;color:var(--t3);font-weight:500;margin-bottom:7px}
+.box p{margin:0;max-width:none;color:var(--t2)}
+.box p+p{margin-top:8px}
+.box ul{margin:6px 0 0 18px;max-width:none}
+
+/* answer summary at top */
+.ans{display:grid;gap:1px;background:var(--border);border:1px solid var(--border);
+  border-radius:4px;margin:30px 0;overflow:hidden}
+.a{background:var(--card);display:grid;grid-template-columns:30px 1fr 1.25fr;gap:0 16px;
+  padding:14px 17px;align-items:baseline}
+.a .q{font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:600;color:var(--accent)}
+.a .t{font-size:.9rem;font-weight:600;color:var(--text)}
+.a .v{font-size:.87rem;color:var(--t2)}
+.a.chg{background:var(--red-bg)}
+
+/* correction component */
+.corr{display:grid;gap:1px;background:var(--border);border:1px solid var(--border);
+  border-radius:4px;margin:20px 0;overflow:hidden}
+.corr .hd{background:var(--stripe);display:grid;grid-template-columns:1fr 1fr;gap:0 1px;
+  font-family:'JetBrains Mono',monospace;font-size:9.5px;letter-spacing:.12em;
+  text-transform:uppercase;color:var(--t3);font-weight:600}
+.corr .hd div{padding:8px 15px;background:var(--stripe)}
+.corr .row{display:grid;grid-template-columns:1fr 1fr;gap:0 1px;background:var(--border)}
+.corr .row>div{padding:13px 15px;font-size:.87rem}
+.corr .was{background:var(--card);color:var(--t3);text-decoration-color:var(--t4)}
+.corr .was s{text-decoration-color:var(--red);text-decoration-thickness:1px}
+.corr .now{background:var(--red-bg);color:var(--t2)}
+.corr .now strong{color:var(--text)}
+
+/* price-vs-distance chart */
+.chart{background:var(--card);border:1px solid var(--border);border-radius:4px;
+  padding:22px 20px 14px;margin:22px 0}
+.crow{display:grid;grid-template-columns:74px 1fr;gap:12px;align-items:center;margin-bottom:9px}
+.clab{font-family:'JetBrains Mono',monospace;font-size:11.5px;color:var(--t2);text-align:right}
+.ctrack{position:relative;height:26px;background:var(--stripe);border-radius:2px}
+.band{position:absolute;top:0;bottom:0;background:var(--accent-lt);border-left:1px dashed var(--accent);
+  border-right:1px dashed var(--accent)}
+.cbar{position:absolute;top:4px;bottom:4px;left:0;background:var(--accent);border-radius:2px}
+.cbar.over{background:var(--red)}
+.cval{position:absolute;top:50%;transform:translateY(-50%);font-family:'JetBrains Mono',monospace;
+  font-size:11px;font-weight:600;padding-left:8px;white-space:nowrap;color:var(--text)}
+.cax{display:grid;grid-template-columns:74px 1fr;gap:12px;margin-top:4px}
+.cticks{position:relative;height:16px}
+.cticks span{position:absolute;transform:translateX(-50%);font-family:'JetBrains Mono',monospace;
+  font-size:10px;color:var(--t3)}
+.cticks span:first-child{transform:none}
+.cap{font-size:.8rem;color:var(--t3);margin-top:12px;max-width:none}
+
+.src{margin-top:46px;padding-top:18px;border-top:1px solid var(--border);
+  font-size:.78rem;color:var(--t3);line-height:1.6}
+.src p{max-width:none;color:var(--t3);margin-bottom:11px}
+.src b{color:var(--t2)}
+.src a{color:var(--accent)}
+
+@media (max-width:660px){
+  .a{grid-template-columns:24px 1fr}
+  .a .v{grid-column:2;margin-top:4px}
+  .corr .hd,.corr .row{grid-template-columns:1fr}
+  .crow,.cax{grid-template-columns:56px 1fr}
+}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+</style>
+
+<div class="wrap">
+
+<div class="eyebrow">Project 04 · RDF · Response to review</div>
+<h1>Four questions. <em>Two change the case.</em></h1>
+<p class="sub">Your manager asked the right things. The mandate question has a sharper answer than I gave, and the P&amp;L question exposes a real error in my numbers. Both are below, with the gazette text and the full cost stack.</p>
+
+<div class="ans">
+  <div class="a"><span class="q">Q1</span><span class="t">Is the mandate RDF-specific, or any AFR?</span><span class="v"><strong>RDF-specific for cement kilns.</strong> Agri-residue and SCF qualify only for WtE and boilers. And the schedule is <strong>6% / 10% / 15%</strong>, not 5%→15%</span></div>
+  <div class="a"><span class="q">Q2</span><span class="t">Real cement-side rates</span><span class="v"><strong>₹400–3,000/t observed</strong>, clustering ₹1,000–2,000. But no quote states ex-works vs delivered — and that gap <em>is</em> the business</span></div>
+  <div class="a chg"><span class="q">Q3</span><span class="t">Detailed P&amp;L with manpower</span><span class="v"><strong>Fully costed, the base case is −2.65% net, not +8.1%.</strong> I had omitted loading, unloading, weighbridge, shrinkage, real lab cost and all fixed manpower</span></div>
+  <div class="a"><span class="q">Q4</span><span class="t">Supplier and buyer geography</span><span class="v"><strong>Start in Telangana</strong> — Nalgonda and Gulbarga clusters against Hyderabad's 8,000 TPD. Delhi and Mumbai are structurally stranded</span></div>
+</div>
+
+<!-- ══════════ 1 ══════════ -->
+<h2><span class="n">Q1</span>The mandate — <em>RDF-specific for cement</em></h2>
+
+<p>From the primary source this time: <strong>SWM Rules 2026, gazette notification S.O. 388(E), notified 27 January 2026</strong>, in force 1 April 2026. <strong>Rule 11</strong>, table on page 89.</p>
+
+<blockquote>“The industrial units utilizing solid fuel shall use Refuse-Derived Fuel <strong>or</strong> Segregated Combustible Fraction <strong>or</strong> agri-residue, <strong>as the case may be, as per the table given below.</strong>”</blockquote>
+
+<p>The operative phrase is <strong>“as the case may be, as per the table”</strong> — each fuel is tied to its own row, and each row names its own permitted end use.</p>
+
+<div class="tbl">
+<table>
+<thead><tr><th>#</th><th>Combustible fraction</th><th>Calorific value</th><th>Intended use</th><th class="n">Distance</th></tr></thead>
+<tbody>
+<tr><td>1</td><td><strong>SCF or agri-residue</strong></td><td>&gt; 1,500 kcal/kg <strong>net</strong></td><td><strong>WtE plants, or industries with boilers</strong></td><td class="n">100 km</td></tr>
+<tr class="hl"><td>2</td><td><strong>RDF Grade I</strong></td><td>&gt; 4,500 kcal/kg net</td><td>Direct co-processing in <strong>cement kilns</strong></td><td class="n">400 km</td></tr>
+<tr class="hl"><td>3</td><td><strong>RDF Grade II</strong></td><td>3,750–4,500 kcal/kg net</td><td>Direct co-processing in <strong>cement kilns</strong></td><td class="n">400 km</td></tr>
+<tr class="hl"><td>4</td><td><strong>RDF Grade III</strong></td><td>3,000–3,750 kcal/kg net</td><td>Co-processing <strong>directly or after processing</strong> with other waste materials in cement kilns</td><td class="n">400 km</td></tr>
+</tbody>
+</table>
+</div>
+
+<div class="box g">
+  <div class="k">So the answer is: fuel-specific by unit type</div>
+  <p><strong>For a cement kiln the table names only RDF Grades I/II/III.</strong> Agri-residue and SCF sit in row 1, whose intended use is WtE plants and boilers — not kilns.</p>
+  <p><strong>Which means a cement plant's existing TSR from tyres, hazardous waste or biomass does not discharge this obligation.</strong> The 6% must be MSW-derived RDF meeting a named grade. <strong>That makes the demand case stronger and more urgent than my earlier read, not weaker.</strong></p>
+</div>
+
+<h3>Three corrections to what I told you</h3>
+
+<div class="corr">
+  <div class="hd"><div>What I said</div><div>What the gazette says</div></div>
+  <div class="row">
+    <div class="was"><s>“5% baseline rising to 15% over six years”</s></div>
+    <div class="now"><strong>6% → 10% → 15%.</strong> At least 6% from day one, 10% after three years, 15% after six. There is an intermediate step I missed, and the floor is 6%, not 5%</div>
+  </div>
+  <div class="row">
+    <div class="was"><s>“Cement TSR already averages 3–5%, so the 5% floor is nearly free”</s></div>
+    <div class="now"><strong>Wrong comparison.</strong> TSR counts all alternative fuels; the mandate needs RDF specifically. <strong>The RDF-specific gap is far larger than the TSR headline suggests</strong></div>
+  </div>
+  <div class="row">
+    <div class="was"><s>“The window is years 2–4, not now”</s></div>
+    <div class="now"><strong>The 6% obligation is live now.</strong> Rules took effect 1 April 2026; the first annual return was due 30 June 2026</div>
+  </div>
+</div>
+
+<h3>What else the gazette settles</h3>
+
+<div class="tbl">
+<table>
+<thead><tr><th>Provision</th><th>What it says</th><th>Why it matters</th></tr></thead>
+<tbody>
+<tr><td><strong>Rule 11(6)</strong></td><td>RDF to cement must be <strong>≥ 3,000 kcal/kg</strong></td><td>A hard regulatory floor, not a commercial preference</td></tr>
+<tr><td><strong>Definition (zl)</strong></td><td>RDF is the combustible fraction <strong>“other than chlorinated materials”</strong></td><td><strong>Chlorine exclusion is now definitional.</strong> Off-spec chlorine isn't just rejectable — it isn't RDF</td></tr>
+<tr><td><strong>Rule 11(2)</strong></td><td>Units must <strong>register with SPCB</strong>, file annual returns by <strong>30 June</strong></td><td>This is precisely the compliance artefact we would sell</td></tr>
+<tr class="hl"><td><strong>Rule 11(3),(4)</strong></td><td>RDF plants must report <strong>availability and quality monthly, and offtake in real time</strong>, on a central portal</td><td><strong>A public supply map is being built by law.</strong> Excellent for sourcing — and it will compress trading spreads, which argues for the service layer over the trade</td></tr>
+<tr><td><strong>Rule 17</strong></td><td><strong>Environmental compensation</strong> by SPCB per CPCB guidelines, into escrow, plus s.15 EP Act action</td><td><strong>The penalty mechanism exists</strong> — but the quantum guidelines are still to be framed. Honest read: mechanism yes, amount not yet set</td></tr>
+</tbody>
+</table>
+</div>
+
+<div class="box r">
+  <div class="k">And one correction that weakens a recommendation of mine</div>
+  <p>I said <strong>“MoHUA defines Grade III as usable only after blending”</strong> and built Option B — the upgrade play — on it. <strong>The gazette says Grade III is for co-processing “directly <em>or</em> after processing with other waste materials.”</strong> Direct use is permitted.</p>
+  <p><strong>Option B's regulatory hook is therefore weaker than I claimed.</strong> Blending is an option, not a requirement. It needs a commercial justification instead — and the price-to-calorific gradient in Q2 is a better one.</p>
+</div>
+
+<div class="box w">
+  <div class="k">A finding that belongs to Project 03, not this one</div>
+  <p>I wrote that SWM 2026 mandates RDF and not biomass, so RDF wins the kiln slot. <strong>Half right.</strong> Agri-residue <em>is</em> named in the rules — but for <strong>WtE plants and industrial boilers within 100 km</strong>, not cement kilns.</p>
+  <p><strong>So agri-residue now has regulation-backed mandated demand in boilers</strong> — which is exactly where Project 01 already showed the ₹/Mcal case was strongest against furnace oil and gas. <strong>That is a new demand driver we did not have. Worth acting on separately.</strong></p>
+</div>
+
+<!-- ══════════ 2 ══════════ -->
+<h2><span class="n">Q2</span>Cement-side rates — <em>what is actually observable</em></h2>
+
+<div class="tbl">
+<table>
+<thead><tr><th>Source</th><th class="n">₹ / tonne</th><th>Stated basis</th><th>Type</th></tr></thead>
+<tbody>
+<tr><td>IndiaMART — Amravati, MH</td><td class="n">400</td><td>&lt; 2,500 kcal/kg — <strong>below the regulatory floor</strong></td><td>Live listing</td></tr>
+<tr><td>IndiaMART — Panchkula, HR</td><td class="n">1,000</td><td>Grade unstated</td><td>Live listing</td></tr>
+<tr class="hl"><td>IndiaMART — Ankleshwar, GJ</td><td class="n">1,500</td><td><strong>3,000–3,500 kcal/kg — Grade III band</strong></td><td>Live listing</td></tr>
+<tr><td>IndiaMART — Sasvad (Pune), MH</td><td class="n">2,000</td><td>Grade unstated</td><td>Live listing</td></tr>
+<tr><td>IndiaMART — Surat, GJ</td><td class="n">3,000</td><td>“RDF 1, loose”</td><td>Live listing</td></tr>
+<tr><td>BBMP / Bengaluru</td><td class="n">2,500</td><td>Offered by cement factories</td><td>Press, older</td></tr>
+<tr><td>Transport, plant → kiln</td><td class="n">1,500</td><td>India average</td><td>Secondary, 2020</td></tr>
+</tbody>
+</table>
+</div>
+
+<div class="box g">
+  <div class="k">There is a real price-to-calorific-value gradient</div>
+  <p><strong>₹400/t below 2,500 kcal. ₹1,500/t at 3,000–3,500 kcal.</strong> That gradient is the first hard evidence for the upgrade play — and a better foundation for Option B than the regulatory reading I got wrong.</p>
+</div>
+
+<div class="box r">
+  <div class="k">But none of it is usable as-is</div>
+  <p><strong>Not one quote states whether it is ex-works or delivered.</strong> That single ambiguity is decisive, because our entire margin lives between the two.</p>
+  <ul>
+    <li>If ₹1,500/t is <strong>ex-works</strong>, delivered at 150 km is ~₹2,250/t and our buy price must be far below ₹1,500.</li>
+    <li>If ₹1,500/t is <strong>delivered</strong>, our buy price must be under ~₹800 and the spread is thin.</li>
+  </ul>
+  <p><strong>My model assumed buy ₹700 ex-works and sell ₹1,500 delivered. The public evidence cannot confirm that pair — and no amount of desk research will.</strong></p>
+</div>
+
+<blockquote>The open item is not “what is the RDF price.” It is <strong>“what is the ex-works price and the delivered price on the same corridor, on the same day.”</strong> Two phone calls.</blockquote>
+
+<h3>Real demand-side behaviour, for calibration</h3>
+
+<div class="tbl">
+<table>
+<thead><tr><th>Company</th><th>Disclosure</th><th class="n">Period</th></tr></thead>
+<tbody>
+<tr class="hl"><td><strong>JSW Cement</strong></td><td><strong>157,000 t RDF co-processed · 16.5% TSR</strong> across 2 facilities</td><td class="n">FY2024-25</td></tr>
+<tr><td><strong>JK Cement</strong></td><td>TSR <strong>11.97%</strong> · 298 kt plastic waste as AFR</td><td class="n">FY2025-26</td></tr>
+<tr><td><strong>Birla Corporation</strong></td><td>&gt; 100,000 t of AFR</td><td class="n">FY2024-25</td></tr>
+<tr><td>UltraTech</td><td>5.7% TSR</td><td class="n">prior</td></tr>
+</tbody>
+</table>
+</div>
+
+<div class="box g">
+  <div class="k">The spread in that table is the targeting insight</div>
+  <p><strong>5.7% to 16.5%.</strong> The leaders are already past the 2032 target; the laggards sit below the day-one floor. <strong>The obligation binds unevenly — and the unevenness is where the buyers are. Target plants below 6%, not the leaders.</strong></p>
+  <p>Caveat that still stands: these are <em>total</em> TSR and AFR figures. The RDF-specific share remains unpublished — and Rule 11(2) returns will be the first time anyone collects it systematically.</p>
+</div>
+
+<!-- ══════════ 3 ══════════ -->
+<h2><span class="n">Q3</span>The P&amp;L — <em>and it does not clear 5%</em></h2>
+
+<div class="box r">
+  <div class="k">The correction</div>
+  <p><strong>Fully costed at 100,000 t/yr, baled, 150 km, the base case is −2.65% net. I previously told you 8.1%.</strong></p>
+  <p>My earlier “cost to serve” of ₹176/t is <strong>₹310/t</strong> in reality. I had omitted loading, unloading, weighbridge and gate charges, transit shrinkage, the real cost of testing every load, and <strong>all fixed manpower.</strong></p>
+</div>
+
+<h3>Manpower, built up properly</h3>
+
+<div class="tbl">
+<table>
+<thead><tr><th>Role</th><th class="n">FTE</th><th class="n">₹ L/yr each</th><th class="n">₹ / yr</th></tr></thead>
+<tbody>
+<tr><td>Commercial / BD lead</td><td class="n">1.0</td><td class="n">18.0</td><td class="n">18,00,000</td></tr>
+<tr><td>Logistics coordinators</td><td class="n">2.0</td><td class="n">7.2</td><td class="n">14,40,000</td></tr>
+<tr><td>Quality &amp; operations executives</td><td class="n">2.0</td><td class="n">6.0</td><td class="n">12,00,000</td></tr>
+<tr><td>Compliance / documentation executive</td><td class="n">1.0</td><td class="n">6.0</td><td class="n">6,00,000</td></tr>
+<tr><td>Accounts &amp; admin (shared)</td><td class="n">0.5</td><td class="n">6.0</td><td class="n">3,00,000</td></tr>
+<tr><td>Business head oversight</td><td class="n">0.2</td><td class="n">30.0</td><td class="n">6,00,000</td></tr>
+<tr class="tot"><td>Sub-total</td><td class="n">6.7</td><td class="n">59.4</td><td class="n">59,40,000</td></tr>
+<tr><td>+ 15% employer cost (PF, ESI, gratuity)</td><td class="n"></td><td class="n"></td><td class="n">8,91,000</td></tr>
+<tr class="hl tot"><td><strong>Total manpower</strong></td><td class="n"></td><td class="n"><strong>68.3</strong></td><td class="n"><strong>68,31,000</strong></td></tr>
+</tbody>
+</table>
+</div>
+
+<p><strong>= ₹68 per tonne at 100,000 t/yr.</strong></p>
+
+<h3>The full stack</h3>
+
+<div class="tbl">
+<table>
+<thead><tr><th>Line</th><th class="n">₹ / yr</th><th class="n">₹ / t</th><th class="n">% rev</th></tr></thead>
+<tbody>
+<tr><td>RDF sale to kiln, delivered</td><td class="n">15,00,00,000</td><td class="n">1,500</td><td class="n">90.9%</td></tr>
+<tr><td><strong>Service fee</strong></td><td class="n">1,50,00,000</td><td class="n"><strong>150</strong></td><td class="n">9.1%</td></tr>
+<tr class="tot"><td><strong>Revenue</strong></td><td class="n"><strong>16,50,00,000</strong></td><td class="n"><strong>1,650</strong></td><td class="n">100%</td></tr>
+<tr><td>RDF purchase, ex-processor baled</td><td class="n neg">(7,00,00,000)</td><td class="n neg">(700)</td><td class="n">42.4%</td></tr>
+<tr><td>Freight, 150 km at 25 t</td><td class="n neg">(6,40,00,000)</td><td class="n neg">(640)</td><td class="n">38.8%</td></tr>
+<tr><td>Loading (hamali) at processor</td><td class="n neg">(60,00,000)</td><td class="n neg">(60)</td><td class="n">3.6%</td></tr>
+<tr><td>Unloading at kiln gate</td><td class="n neg">(32,00,000)</td><td class="n neg">(32)</td><td class="n">1.9%</td></tr>
+<tr><td>Weighbridge and gate charges</td><td class="n neg">(10,00,000)</td><td class="n neg">(10)</td><td class="n">0.6%</td></tr>
+<tr><td>Transit loss / fines, 1.5%</td><td class="n neg">(10,50,000)</td><td class="n neg">(10)</td><td class="n">0.6%</td></tr>
+<tr class="tot"><td><strong>Gross contribution</strong></td><td class="n"><strong>1,97,50,000</strong></td><td class="n"><strong>198</strong></td><td class="n">12.0%</td></tr>
+<tr><td>Third-party lab, <strong>every load</strong></td><td class="n neg">(1,00,00,000)</td><td class="n neg">(100)</td><td class="n">6.1%</td></tr>
+<tr><td>Rejection cost, 2% of loads</td><td class="n neg">(26,48,000)</td><td class="n neg">(26)</td><td class="n">1.6%</td></tr>
+<tr><td>Transit and stock insurance</td><td class="n neg">(2,25,000)</td><td class="n neg">(2)</td><td class="n">0.1%</td></tr>
+<tr><td><strong>Manpower, fully loaded</strong></td><td class="n neg">(68,31,000)</td><td class="n neg">(68)</td><td class="n">4.1%</td></tr>
+<tr><td>Other overheads</td><td class="n neg">(22,00,000)</td><td class="n neg">(22)</td><td class="n">1.3%</td></tr>
+<tr><td>Working capital, 40 days at 14%</td><td class="n neg">(22,12,000)</td><td class="n neg">(22)</td><td class="n">1.3%</td></tr>
+<tr class="bad tot"><td><strong>PBT</strong></td><td class="n neg"><strong>(43,66,000)</strong></td><td class="n neg"><strong>(44)</strong></td><td class="n neg"><strong>−2.65%</strong></td></tr>
+</tbody>
+</table>
+</div>
+
+<div class="box r">
+  <div class="k">Why it fails, in one line</div>
+  <p><strong>Landed cost is ₹1,452/t</strong> — buy ₹700 plus ₹752 of logistics and handling. <strong>Selling at ₹1,500 leaves ₹48/t on the goods.</strong> The ₹150 fee then has to carry ₹240/t of quality, fixed and financing cost. It cannot.</p>
+</div>
+
+<h3>What actually moves it — each lever alone</h3>
+
+<div class="tbl">
+<table>
+<thead><tr><th>Change from base</th><th class="n">Net margin</th><th></th></tr></thead>
+<tbody>
+<tr class="hl"><td><strong>Sale ₹1,800 instead of ₹1,500</strong></td><td class="n pos">+13.12%</td><td>Clears</td></tr>
+<tr><td>Sale ₹2,000</td><td class="n pos">+21.19%</td><td>Clears</td></tr>
+<tr><td>Sale ₹2,500 (the Bengaluru figure)</td><td class="n pos">+36.03%</td><td>Clears</td></tr>
+<tr class="hl"><td><strong>Fee ₹300 instead of ₹150</strong></td><td class="n pos">+5.91%</td><td>Clears</td></tr>
+<tr class="hl"><td><strong>Lead 100 km instead of 150</strong></td><td class="n pos">+10.90%</td><td>Clears</td></tr>
+<tr><td>Lead 75 km</td><td class="n pos">+17.67%</td><td>Clears</td></tr>
+<tr><td>Buy ₹600 instead of ₹700</td><td class="n">+3.60%</td><td>Short</td></tr>
+<tr><td>Test 1 load in 3 instead of every load</td><td class="n">+1.39%</td><td>Short</td></tr>
+<tr><td>Volume 300,000 t/yr</td><td class="n">+1.00%</td><td><strong>Barely helps</strong></td></tr>
+<tr class="bad"><td>Rejection 0.5% instead of 2%</td><td class="n neg">−1.44%</td><td>Still a loss</td></tr>
+</tbody>
+</table>
+</div>
+
+<p><strong>Volume barely helps. Price and distance are everything</strong> — the same conclusion the bulk-density work reached, now confirmed on the full cost stack.</p>
+
+<h3>The chart to take into the room</h3>
+
+<div class="chart">
+  <div class="crow"><div class="clab">75 km</div><div class="ctrack">
+    <div class="band" style="left:13.3%;width:86.7%"></div>
+    <div class="cbar" style="width:34.2%"></div><div class="cval" style="left:34.2%">₹1,027</div></div></div>
+  <div class="crow"><div class="clab">100 km</div><div class="ctrack">
+    <div class="band" style="left:13.3%;width:86.7%"></div>
+    <div class="cbar" style="width:38.2%"></div><div class="cval" style="left:38.2%">₹1,145</div></div></div>
+  <div class="crow"><div class="clab">150 km</div><div class="ctrack">
+    <div class="band" style="left:13.3%;width:86.7%"></div>
+    <div class="cbar" style="width:46.0%"></div><div class="cval" style="left:46.0%">₹1,381</div></div></div>
+  <div class="crow"><div class="clab">200 km</div><div class="ctrack">
+    <div class="band" style="left:13.3%;width:86.7%"></div>
+    <div class="cbar" style="width:53.9%"></div><div class="cval" style="left:53.9%">₹1,616</div></div></div>
+  <div class="crow"><div class="clab">250 km</div><div class="ctrack">
+    <div class="band" style="left:13.3%;width:86.7%"></div>
+    <div class="cbar over" style="width:61.7%"></div><div class="cval" style="left:61.7%">₹1,852</div></div></div>
+  <div class="crow"><div class="clab">300 km</div><div class="ctrack">
+    <div class="band" style="left:13.3%;width:86.7%"></div>
+    <div class="cbar over" style="width:69.6%"></div><div class="cval" style="left:69.6%">₹2,087</div></div></div>
+  <div class="crow"><div class="clab">400 km</div><div class="ctrack">
+    <div class="band" style="left:13.3%;width:86.7%"></div>
+    <div class="cbar over" style="width:85.3%"></div><div class="cval" style="left:85.3%">₹2,559</div></div></div>
+  <div class="cax"><div></div><div class="cticks">
+    <span style="left:0%">₹0</span><span style="left:25%">750</span><span style="left:50%">1,500</span>
+    <span style="left:75%">2,250</span><span style="left:100%">₹3,000</span></div></div>
+  <p class="cap"><strong>Sale price required for 5% net, by haul distance</strong> (fee ₹300, 1-in-3 testing, 150k t/yr). The shaded band is the <strong>observed market range, ₹400–3,000/t</strong>. Green bars sit comfortably inside it; red bars need a price at or above the top of everything observed. <strong>The regulatory radius is 400 km. Our economics run out around 200.</strong></p>
+</div>
+
+<div class="box w">
+  <div class="k">The gap between the two radii is the whole strategic question</div>
+  <p>The rules oblige kilns within <strong>400 km</strong> of an RDF plant. Our economics work to roughly <strong>200 km</strong>. <strong>The 200–400 km band is obligated but not economically self-servable.</strong></p>
+  <p>That is either the opportunity — someone must solve it, and density plus route density is how — <strong>or the trap</strong>, if kilns simply refuse to pay for distance. <strong>It is the second question to ask on the first call.</strong></p>
+</div>
+
+<h3>And volume is not the constraint you'd expect</h3>
+
+<div class="tbl">
+<table>
+<thead><tr><th>Sale price (fee ₹300, 1-in-3, 100 km)</th><th class="n">Volume for 5% net</th><th class="n">Trucks/day</th></tr></thead>
+<tbody>
+<tr><td>₹1,500/t</td><td class="n">22,762 t/yr</td><td class="n">3.0</td></tr>
+<tr><td>₹1,800/t</td><td class="n">13,255 t/yr</td><td class="n">1.8</td></tr>
+<tr class="hl"><td>₹2,000/t</td><td class="n"><strong>10,368 t/yr</strong></td><td class="n"><strong>1.4</strong></td></tr>
+</tbody>
+</table>
+</div>
+
+<p><strong>Once price and distance are right, the fixed team is carried at very low volume.</strong> Scale is not the problem. <strong>Getting the first corridor right is the entire problem.</strong></p>
+
+<div class="box r">
+  <div class="k">How to present the upside numbers honestly</div>
+  <p>Configurations reaching 22–33% net exist in the model — sale ₹1,800 plus a ₹300 fee at 100 km, for instance. <strong>Do not present those as a forecast.</strong> They are what the model returns <em>if</em> a ₹1,800–2,000 delivered price and a ₹700 ex-works buy coexist on one corridor — <strong>and that pair is exactly what Q2 shows is unverified.</strong></p>
+  <p>The defensible framing: <strong>the business is viable inside a narrow envelope of price and distance, and we can test whether that envelope exists for roughly zero cost in two weeks.</strong></p>
+</div>
+
+<!-- ══════════ 4 ══════════ -->
+<h2><span class="n">Q4</span>Geography — <em>start in Telangana</em></h2>
+
+<p>India's cement capacity sits in <strong>seven clusters holding 75.23 mtpa, about 49% of installed capacity</strong>. Paired against municipal waste inside our ~200 km economic radius, at 20% RDF yield:</p>
+
+<div class="tbl">
+<table>
+<thead><tr><th>#</th><th>Cluster</th><th class="n">MSW ≤200 km</th><th class="n">RDF potential</th><th>Feeder cities</th></tr></thead>
+<tbody>
+<tr class="hl"><td>1</td><td><strong>Gulbarga / Kalaburagi</strong></td><td class="n"><strong>8,400 TPD</strong></td><td class="n"><strong>613,000 t/yr</strong></td><td>Hyderabad 200 km · Solapur 110 km</td></tr>
+<tr class="hl"><td>2</td><td><strong>Nalgonda (Telangana)</strong></td><td class="n"><strong>8,000 TPD</strong></td><td class="n"><strong>584,000 t/yr</strong></td><td><strong>Hyderabad 100 km</strong></td></tr>
+<tr><td>3</td><td>Satna (MP)</td><td class="n">1,300 TPD</td><td class="n">94,900 t/yr</td><td>Jabalpur 180 km · Prayagraj 180 km</td></tr>
+<tr><td>4</td><td>Chandrapur (MH)</td><td class="n">1,200 TPD</td><td class="n">87,600 t/yr</td><td>Nagpur 150 km</td></tr>
+<tr><td>5</td><td>Chanderia (Rajasthan)</td><td class="n">750 TPD</td><td class="n">54,750 t/yr</td><td>Udaipur 120 km · Kota 190 km</td></tr>
+<tr><td>6</td><td>Bilaspur (Chhattisgarh)</td><td class="n">500 TPD</td><td class="n">36,500 t/yr</td><td>Raipur 120 km</td></tr>
+<tr class="dead"><td>7</td><td>Yerraguntla (AP)</td><td class="n">—</td><td class="n">—</td><td>Nothing major inside 200 km</td></tr>
+</tbody>
+</table>
+</div>
+
+<div class="box r">
+  <div class="k">The structural dead zones — and a correction to my own sizing</div>
+  <p><strong>Delhi, 11,000 TPD: no cement kilns in NCR.</strong> Nearest are Kotputli (Rajasthan) and Bilaspur (HP). North Delhi Municipal Corp had to float an <em>all-India</em> tender for its Bhalswa biomining RDF precisely because it had no local offtake.</p>
+  <p><strong>Mumbai, 8,000 TPD: no kilns within economic reach.</strong></p>
+  <p><strong>India's two largest waste sources are commercially stranded for RDF.</strong> Any sizing that multiplies national MSW by a yield factor is wrong for exactly this reason — <strong>and mine did.</strong> Geography, not volume, is the binding constraint.</p>
+</div>
+
+<div class="box g">
+  <div class="k">Recommendation — Hyderabad into Nalgonda and Gulbarga</div>
+  <ul>
+    <li><strong>The best waste-to-kiln pairing in India.</strong> 8,000–9,000 TPD of MSW with cement capacity at ~100 km and ~200 km. Nothing else comes close on both dimensions at once.</li>
+    <li><strong>100 km puts us in the ₹1,145/t breakeven band</strong> — the most forgiving row in the chart above, and the difference between a viable and an unviable model.</li>
+    <li><strong>Two clusters off one supply base.</strong> Competitive tension between buyers, and a fallback if one kiln's spec proves impossible.</li>
+    <li><strong>Hyderabad already processes at scale</strong>, so baled, spec-consistent material is plausible rather than aspirational.</li>
+    <li><strong>Recykal is headquartered here.</strong> For a play whose entire first phase is phone calls and one truck, zero-cost site access matters more than it looks.</li>
+  </ul>
+  <p><strong>Second choice: Nagpur → Chandrapur.</strong> 150 km, one clean corridor, much smaller volume. A controlled second test, not the opening move. <strong>Do not start in Delhi or Mumbai</strong> despite the waste — the kilns are not there.</p>
+</div>
+
+<h3>What to verify before committing to the corridor</h3>
+<ul>
+  <li><strong>Which Hyderabad-area processors bale</strong>, and to what bulk density</li>
+  <li><strong>Which Nalgonda and Gulbarga plants are below 6% RDF</strong> — those are the buyers with a problem</li>
+  <li><strong>Actual road distance plant-by-plant</strong>, not cluster centroid</li>
+  <li><strong>Whether Telangana SPCB has issued any Rule 11 enforcement</strong> — the first real test of whether the penalty bites</li>
+</ul>
+
+<!-- ══════════ close ══════════ -->
+<h2>What I would change in <em>the recommendation</em></h2>
+
+<p><strong>The direction holds. The confidence does not.</strong></p>
+
+<div class="corr">
+  <div class="hd"><div>Before</div><div>Now</div></div>
+  <div class="row"><div class="was"><s>8.1% net, asset-light, go</s></div><div class="now"><strong>−2.65% at the assumptions I used.</strong> Viable only inside a narrow price-and-distance envelope</div></div>
+  <div class="row"><div class="was"><s>“The window is years 2–4”</s></div><div class="now"><strong>The obligation is live now</strong> — 6% since 1 April 2026</div></div>
+  <div class="row"><div class="was"><s>“Demand is not the constraint”</s></div><div class="now">Still true nationally — <strong>but geography is, and I under-weighted it</strong></div></div>
+  <div class="row"><div class="was"><s>Service fee ₹150/t</s></div><div class="now"><strong>₹300/t or the model does not work.</strong> The fee is 76% of gross contribution</div></div>
+  <div class="row"><div class="was"><s>Option B rests on Grade III needing blending</s></div><div class="now"><strong>It doesn't — direct use is permitted.</strong> Option B needs the price-to-calorific gradient as its justification instead</div></div>
+  <div class="row"><div class="was"><s>Start anywhere</s></div><div class="now"><strong>Start Hyderabad → Nalgonda / Gulbarga</strong></div></div>
+</div>
+
+<div class="box g">
+  <div class="k">The ask is unchanged, and small</div>
+  <p><strong>Two phone calls, to establish the ex-works and delivered price pair on one Telangana corridor.</strong> That single data point decides whether this is a 20%-plus business or not a business at all.</p>
+  <p><strong>Everything else in this document is downstream of it.</strong></p>
+</div>
+
+<div class="src">
+<p><strong>Gazette.</strong> SWM Rules 2026, S.O. 388(E), notified 27 Jan 2026, in force 1 Apr 2026 — Rule 11 and its table, Rule 17, definition (zl). <strong>All mandate statements in Q1 are from the primary text, not secondary reporting.</strong></p>
+<p><strong>Prices.</strong> <a href="https://dir.indiamart.com/impcat/refuse-derived-fuel.html">IndiaMART RDF listings</a> (live seller quotes) · <a href="https://www.deccanherald.com/content/609349/palike-plans-use-rdf-its.html">Deccan Herald on BBMP and cement at ₹2,500/t</a> · <a href="https://www.cemnet.com/News/story/167876/cement-companies-targeted-with-an-all-india-rdf-tender.html">CemNet, North Delhi all-India RDF tender</a> · <a href="https://renewablewatch.in/2025/03/01/alternative-fuel-maximising-rdf-use-in-karnatakas-cement-industry/">Renewable Watch, Karnataka RDF</a>.</p>
+<p><strong>Company disclosures.</strong> JSW Cement FY25 RDF and TSR · <a href="https://scanx.trade/stock-market-news/companies/jk-cement-files-business-responsibility-and-sustainability-report-for-fy26/44016066">JK Cement BRSR FY26</a> · <a href="https://birlacorporation.com/green-fuel-afr.html">Birla Corporation AFR</a>.</p>
+<p><strong>Waste and geography.</strong> CPCB MSW totals via the <a href="https://eacpm.gov.in/wp-content/uploads/2024/05/Solid_Waste_management_Updated.pdf">EAC-PM working paper</a> · city TPD from press and academic sources · cluster list via <a href="https://www.gktoday.in/cement-industry-of-india/">GKToday</a> and the <a href="https://www.cemnet.com/global-cement-report/country/india">CemNet India plant register</a>. <strong>Costs.</strong> Loading and unloading ₹1,000–2,000 per shipment, <a href="https://truckguru.co.in/blog/how-to-estimate-goods-transport-rates-a-beginners-guide/">TruckGuru</a>; manpower rates are our own estimates at Indian market levels.</p>
+<p><strong>Confidence.</strong> Q1 is <strong>high</strong> — primary gazette text. Q2 is <strong>low on basis, medium on range</strong> — real quotes, unstated basis. Q3's arithmetic is <strong>exact given its inputs</strong>, but those inputs carry <strong>low</strong> confidence until the price pair is verified. Q4 is <strong>medium</strong> — cluster and city data sourced, distances approximate and needing per-plant verification.</p>
+</div>
+
+</div>
+</body>
+</html>
